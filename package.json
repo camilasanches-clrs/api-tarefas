@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/camilasanches-clrs/api-tarefas/issues"
   },
-  "homepage": "https://github.com/camilasanches-clrs/api-tarefas#readme"
+  "homepage": "https://github.com/camilasanches-clrs/api-tarefas#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
 }
