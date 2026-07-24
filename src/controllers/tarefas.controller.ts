@@ -9,7 +9,13 @@ export function createTarefa(req: Request, res: Response): void {
 }
 
 export function listTarefas(req: Request, res: Response): void {
-    const tarefas = tarefaService.listTarefas();
+    let completed: boolean | undefined = undefined;
+    if(req.query.completed === "true"){
+         completed = true;
+    } else if (req.query.completed === "false"){
+         completed = false;
+    }
+    const tarefas = tarefaService.listTarefas(completed);
     res.status(200).json(tarefas);
 }
 

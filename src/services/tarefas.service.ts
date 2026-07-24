@@ -10,7 +10,10 @@ export function createTarefa(title: string): Tarefa {
     return tarefa;
 }
 
-export function listTarefas(): Tarefa[] {
+export function listTarefas(completed?: boolean): Tarefa[] {
+    if(completed !== undefined){
+        return tarefas.filter((tarefa) => tarefa.completed === completed);
+    }
     return tarefas;
 }
 
