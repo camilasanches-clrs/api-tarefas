@@ -4,7 +4,7 @@ import { Tarefa } from "../interfaces/tarefas.interface";
 const tarefas: Tarefa[] = [];
 
 export function createTarefa(title: string): Tarefa {
-    const id = Math.random();
+    const id = Math.floor(Math.random() * 1000000);
     const tarefa: Tarefa = { id, title, completed: false };
     tarefas.push(tarefa);
     return tarefa;
