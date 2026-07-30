@@ -1,4 +1,4 @@
-import { Task } from "../../generated/prisma";
+import { Task } from "../../generated/prisma/client";
 import prisma from "../config/prismaClient";
 
 
@@ -17,8 +17,8 @@ export async function listTarefas(completed?: boolean): Promise<Task[]> {
 }
 
 export async function getTarefaById(id: number): Promise<Task | undefined >{
-
-    return await prisma.task.findUnique({ where: {id}});
+    const tarefa = await prisma.task.findUnique({ where: {id}});
+    return tarefa ?? undefined;
 }
 
 export async function updateTarefa(id: number, dados: { title?: string; completed?: boolean }): Promise<Task | undefined >{
