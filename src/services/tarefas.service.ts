@@ -1,46 +1,41 @@
+import { Task } from "@prisma/client";
+import prisma from "../config/prismaClient";
 
-import { Tarefa } from "../interfaces/tarefas.interface";
 
-const tarefas: Tarefa[] = [];
-
-export function createTarefa(title: string): Tarefa {
-    const id = Math.floor(Math.random() * 1000000);
-    const tarefa: Tarefa = { id, title, completed: false };
-    tarefas.push(tarefa);
-    return tarefa;
+export async function createTarefa(title: string): Promise<Task> {
+    
+    return await prisma.task.create({
+        data: { title: title }
+    });
 }
 
-export function listTarefas(completed?: boolean): Tarefa[] {
+export async function listTarefas(completed?: boolean): Promise<Task[]> {
     if(completed !== undefined){
-        return tarefas.filter((tarefa) => tarefa.completed === completed);
+        return await prisma.task.findMany({where: {completed}});
     }
-    return tarefas;
+    return await prisma.task.findMany();
 }
 
-export function getTarefaById(id: number): Tarefa | undefined {
-    return tarefas.find((tarefa) => tarefa.id === id);
+export async function getTarefaById(id: number): Promise<Task | undefined >{
+    const tarefa = await prisma.task.findUnique({ where: {id}});
+    return tarefa ?? undefined;
 }
 
-export function updateTarefa(id: number, dados: { title?: string; completed?: boolean }): Tarefa | undefined {
-    const tarefa = getTarefaById(id);
-    if (tarefa) {
-        if (dados.title !== undefined) {
-            tarefa.title = dados.title;
-        }
-        if (dados.completed !== undefined) {
-            tarefa.completed = dados.completed;
-        }
+export async function updateTarefa(id: number, dados: { title?: string; completed?: boolean }): Promise<Task | undefined >{
+    const tarefa = await getTarefaById(id);
+    if(!tarefa){
+        return undefined;
     }
-    return tarefa;
+    return await prisma.task.update({ where: {id}, data: dados});
 }
 
-export function deleteTarefa(id: number): boolean {
-    const index = tarefas.findIndex((tarefa) => tarefa.id === id);
-
-    if (index !== -1) {
-        tarefas.splice(index, 1);
-        return true;
+export async function deleteTarefa(id: number): Promise< boolean> {
+    const tarefa = await getTarefaById(id);
+    if(!tarefa){
+        return false;
     }
+    await prisma.task.delete({ where: { id } });
+    return true;
 
-    return false;
+
 }
